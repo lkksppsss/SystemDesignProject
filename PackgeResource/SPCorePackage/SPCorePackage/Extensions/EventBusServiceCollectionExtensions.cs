@@ -13,7 +13,7 @@ namespace SPCorePackage.Extensions;
 
 public static class EventBusServiceCollectionExtensions
 {
-    public static IServiceCollection AddKafkaBus([NotNull] this IServiceCollection services, string connectString)
+    public static IServiceCollection AddKafkaBus([NotNull] this IServiceCollection services, string connectString, params string[] topics)
     {
         //註冊EventHandler
         foreach (var typeInfo in Assembly.GetCallingAssembly().GetTypes())
@@ -27,7 +27,7 @@ public static class EventBusServiceCollectionExtensions
 
         services.AddSingleton<IEventBus, KafkaService>(sp =>
         {
-            return new KafkaService(connectString);
+            return new KafkaService(connectString, topics);
         });
 
         return services;

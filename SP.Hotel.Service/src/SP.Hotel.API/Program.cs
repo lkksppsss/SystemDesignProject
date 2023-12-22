@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MySqlConnector;
 using NLog.Web;
+using SP.Hotel.API.Application.IntegrationEvents.EventHandling;
+using SP.Hotel.API.Application.IntegrationEvents.PublishEvents;
 using SP.Hotel.API.Application.Queries;
 using SP.Hotel.Domian.AggregatesModel.HotelAggregate;
 using SP.Hotel.Infrastructure;
@@ -74,7 +76,7 @@ public class Program
         builder.Services.AddMemoryCache();
 
         var kafkaConnectString = configuration.GetSection("KafkaConnectString").Value;
-        builder.Services.AddKafkaBus(kafkaConnectString);
+        builder.Services.AddKafkaBus(kafkaConnectString, TestPublishEvent.EventName);
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
@@ -154,7 +156,7 @@ public class Program
 
         var eventBus = app.Services.GetRequiredService<IEventBus>();
 
-        eventBus.Subscribe<>();
+        eventBus.Subscribe<TestPublishEvent, TestPublishEventHandler > (TestPublishEvent.EventName);
 
 
         app.Services.UseScheduler(scheduler =>

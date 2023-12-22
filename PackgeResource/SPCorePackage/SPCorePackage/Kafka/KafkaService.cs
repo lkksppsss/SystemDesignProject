@@ -1,9 +1,10 @@
-﻿using Confluent.Kafka;
+﻿using Autofac;
+using Confluent.Kafka;
+using Confluent.Kafka.Admin;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SPCorePackage.Kafka.Interface;
 using System.Text;
-using System.Text.Json;
-using static Confluent.Kafka.ConfigPropertyNames;
 
 namespace SPCorePackage.Kafka;
 
@@ -11,21 +12,34 @@ public class KafkaService : IEventBus
 {
     private ProducerBuilder<string, object> ProducerBuilder;
     private ConsumerBuilder<string, object> ConsumerBuilder;
-    public KafkaService(string service)
+    private List<string> _topicNames;
+    private IAdminClient _kafkaConnection;
+    private ConsumerConfig _consumerConfig;
+    private readonly CancellationTokenSource _cancelTokenSource;
+
+    public KafkaService(string service, params string[] topics)
     {
         ProducerConfig producerConfig = new ProducerConfig();
         producerConfig.BootstrapServers = service;
         ProducerBuilder = new ProducerBuilder<string, object>(producerConfig);
+        _cancelTokenSource = new CancellationTokenSource();
         ProducerBuilder.SetValueSerializer(new KafkaConverter());//设置序列化方式
-
-        var consumerConfig = new ConsumerConfig
+        _consumerConfig = new ConsumerConfig
         {
             BootstrapServers = service,
             EnableAutoCommit = false,
             AutoOffsetReset = AutoOffsetReset.Earliest,
+            GroupId = "group"
         };
-        ConsumerBuilder = new ConsumerBuilder<string, object>(consumerConfig);
+
+        var adminConfig = new AdminClientConfig
+        {
+            BootstrapServers = service
+        };
+        _kafkaConnection = new AdminClientBuilder(adminConfig).Build();
+        ConsumerBuilder = new ConsumerBuilder<string, object>(_consumerConfig);
         ConsumerBuilder.SetValueDeserializer(new KafkaConverter());//设置反序列化方式
+        _topicNames = CreateTopics(topics);
     }
 
     public async Task PublishAsync<T>(string exchangeName, T @event) where T : IntegrationEvent
@@ -63,12 +77,12 @@ public class KafkaService : IEventBus
     }
 
 
-    public void Subscribe<T, TH>(string topicName, string groupId = null)
+    public void Subscribe<T, TH>(string topicName)
         where T : IntegrationEvent
         where TH : IIntegrationEventHandler<T>
     {
 
-        var consumer = ConsumerBuilder.Build();
+        /*var consumer = ConsumerBuilder.Build();
         consumer.Subscribe(topicName);
         bool errorSent = false;
         while (true)
@@ -80,10 +94,89 @@ public class KafkaService : IEventBus
             Task.Delay(10000).Wait();
             var result = consumer.Consume();
             consumer.Commit(result);
+        }*/
+
+        bool errorSent = false;
+        while (this._topicNames.Contains(topicName) == false)
+        {
+            if (errorSent == false)
+            {
+                errorSent = true;
+            }
+            Task.Delay(10000).Wait();
+            this._topicNames = GetTopics();
         }
+        StartBasicConsume<T, TH>(topicName, "group").Wait();
+    }
+    private async Task StartBasicConsume<T, TH>(string topicName, string groupId)
+        where T : IntegrationEvent
+        where TH : IIntegrationEventHandler<T>
+    {
+        await Task.Yield();
+        var consumerService = new KafkaConsumerService<T, TH>(GetConsumer(groupId),topicName);
+
+        await consumerService.StartAsync(_cancelTokenSource.Token);
+    }
+
+    public List<string> GetTopics()
+    {
+
+        var metadata = _kafkaConnection.GetMetadata(TimeSpan.FromSeconds(10));
+        var topicsMetadata = metadata.Topics;
+        return metadata.Topics.Select(a => a.Topic).ToList();
+    }
+
+    private List<string> CreateTopics(params string[] createTopicOptions)
+    {
+        //建立topic
+        var allTopicNames = new List<string>();
+
+        var metadata = _kafkaConnection.GetMetadata(TimeSpan.FromSeconds(10));
+        var topicsMetadata = metadata.Topics;
+        var topicNames = metadata.Topics.Select(a => a.Topic).ToList();
+        allTopicNames.AddRange(topicNames);
+
+        if (createTopicOptions != null)
+        {
+            var newTopicSpecs = new List<TopicSpecification>();
+
+            foreach (var option in createTopicOptions)
+            {
+                if (topicNames.Contains(option))
+                {
+                    continue;
+                }
+                var newTopicSpec = new TopicSpecification
+                {
+                    Name = option
+                };
+                newTopicSpecs.Add(newTopicSpec);
+            }
+            try
+            {
+                if (newTopicSpecs.Count > 0)
+                {
+                    _kafkaConnection.CreateTopicsAsync(newTopicSpecs).Wait();
+                    allTopicNames.AddRange(newTopicSpecs.Select(x => x.Name));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occured creating topic ex={ex}");
+            }
+        }
+        return allTopicNames;
+    }
+
+    public IConsumer<string, string> GetConsumer(string groupId)
+    {
+        var config = new ConsumerConfig(_consumerConfig);
+        config.GroupId = groupId;
+        return new ConsumerBuilder<string, string>(config).Build();
     }
 
 }
+
 public class KafkaConverter : ISerializer<object>, IDeserializer<object>
 {
     /// <summary>
