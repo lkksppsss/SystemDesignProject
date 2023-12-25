@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using SP.Hotel.API.Application.Commands;
 using SP.Hotel.API.Application.IntegrationEvents.PublishEvents;
-using SP.Hotel.API.SeedWork;
 using SPCorePackage.Kafka.Interface;
+using SPCorePackage.SeedWork;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace SP.Hotel.API.Controllers;

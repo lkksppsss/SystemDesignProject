@@ -1,0 +1,6 @@
+@SP.SPU.API_HostAddress = http://localhost:5089
+
+GET {{SP.SPU.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

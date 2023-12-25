@@ -1,4 +1,4 @@
-﻿namespace SP.Hotel.API.SeedWork;
+﻿namespace SPCorePackage.SeedWork;
 
 public class ResponseException
 {

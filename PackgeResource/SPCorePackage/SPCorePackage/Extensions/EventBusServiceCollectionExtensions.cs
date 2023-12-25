@@ -27,7 +27,8 @@ public static class EventBusServiceCollectionExtensions
 
         services.AddSingleton<IEventBus, KafkaService>(sp =>
         {
-            return new KafkaService(connectString, topics);
+            var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
+            return new KafkaService(connectString, iLifetimeScope, topics);
         });
 
         return services;

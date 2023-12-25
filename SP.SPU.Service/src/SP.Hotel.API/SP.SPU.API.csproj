@@ -24,8 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SP.Hotel.Domian\SP.Hotel.Domian.csproj" />
-    <ProjectReference Include="..\SP.Hotel.Infrastructure\SP.Hotel.Infrastructure.csproj" />
+    <ProjectReference Include="..\SP.Hotel.Domian\SP.SPU.Domian.csproj" />
+    <ProjectReference Include="..\SP.Hotel.Infrastructure\SP.SPU.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

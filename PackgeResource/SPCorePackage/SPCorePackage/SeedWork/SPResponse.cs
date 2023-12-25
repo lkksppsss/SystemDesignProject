@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SP.Hotel.API.SeedWork;
+namespace SPCorePackage.SeedWork;
 
 public class SPResponse<T>
 {

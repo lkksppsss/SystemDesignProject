@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SPCorePackage.Kafka.Interface;
 using System.Text;
+using System.Text.Json;
 
 namespace SPCorePackage.Kafka;
 
@@ -16,14 +17,16 @@ public class KafkaService : IEventBus
     private IAdminClient _kafkaConnection;
     private ConsumerConfig _consumerConfig;
     private readonly CancellationTokenSource _cancelTokenSource;
+    private readonly ILifetimeScope _autofac;
 
-    public KafkaService(string service, params string[] topics)
+    public KafkaService(string service, ILifetimeScope autofac, params string[] topics)
     {
         ProducerConfig producerConfig = new ProducerConfig();
         producerConfig.BootstrapServers = service;
+        _autofac = autofac;
         ProducerBuilder = new ProducerBuilder<string, object>(producerConfig);
-        _cancelTokenSource = new CancellationTokenSource();
         ProducerBuilder.SetValueSerializer(new KafkaConverter());//设置序列化方式
+        _cancelTokenSource = new CancellationTokenSource();
         _consumerConfig = new ConsumerConfig
         {
             BootstrapServers = service,
@@ -38,7 +41,6 @@ public class KafkaService : IEventBus
         };
         _kafkaConnection = new AdminClientBuilder(adminConfig).Build();
         ConsumerBuilder = new ConsumerBuilder<string, object>(_consumerConfig);
-        ConsumerBuilder.SetValueDeserializer(new KafkaConverter());//设置反序列化方式
         _topicNames = CreateTopics(topics);
     }
 
@@ -56,14 +58,9 @@ public class KafkaService : IEventBus
                 var guid = Guid.NewGuid().ToString("N");
                 var @event = events[i];
 
-                var body = JsonConvert.SerializeObject(@event, new JsonSerializerSettings
-                {
-                    Formatting = Formatting.Indented // 設定 Formatting 屬性為 Indented
-                });
-
                 Message<string, object> msg = new Message<string, object>();
                 msg.Key = guid;
-                msg.Value = body;
+                msg.Value = @event;
 
                 var res = await producer.ProduceAsync(exchangeName, msg);
             }
@@ -81,21 +78,6 @@ public class KafkaService : IEventBus
         where T : IntegrationEvent
         where TH : IIntegrationEventHandler<T>
     {
-
-        /*var consumer = ConsumerBuilder.Build();
-        consumer.Subscribe(topicName);
-        bool errorSent = false;
-        while (true)
-        {
-            if (errorSent == false)
-            {
-                errorSent = true;
-            }
-            Task.Delay(10000).Wait();
-            var result = consumer.Consume();
-            consumer.Commit(result);
-        }*/
-
         bool errorSent = false;
         while (this._topicNames.Contains(topicName) == false)
         {
@@ -112,8 +94,8 @@ public class KafkaService : IEventBus
         where T : IntegrationEvent
         where TH : IIntegrationEventHandler<T>
     {
-        await Task.Yield();
-        var consumerService = new KafkaConsumerService<T, TH>(GetConsumer(groupId),topicName);
+        TH handler = _autofac.Resolve<TH>();
+        var consumerService = new KafkaConsumerService<T, TH>(_autofac.Resolve<ILogger<KafkaConsumerService<T, TH>>>(), GetConsumer(groupId), topicName, _autofac);
 
         await consumerService.StartAsync(_cancelTokenSource.Token);
     }
@@ -174,45 +156,44 @@ public class KafkaService : IEventBus
         config.GroupId = groupId;
         return new ConsumerBuilder<string, string>(config).Build();
     }
-
-}
-
-public class KafkaConverter : ISerializer<object>, IDeserializer<object>
-{
-    /// <summary>
-    /// 序列化数据成字节
-    /// </summary>
-    /// <param name="data"></param>
-    /// <param name="context"></param>
-    /// <returns></returns>
-    public byte[] Serialize(object data, SerializationContext context)
+    public class KafkaConverter : ISerializer<object>, IDeserializer<object>
     {
-        var settings = new JsonSerializerSettings
+        /// <summary>
+        /// 序列化数据成字节
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public byte[] Serialize(object data, SerializationContext context)
         {
-            Formatting = Formatting.Indented // 設定 Formatting 屬性為 Indented
-        };
-        var json = JsonConvert.SerializeObject(data, settings);
-        return Encoding.UTF8.GetBytes(json);
-    }
-
-    /// <summary>
-    /// 反序列化字节数据成实体数据
-    /// </summary>
-    /// <param name="data"></param>
-    /// <param name="context"></param>
-    /// <returns></returns>
-    public object Deserialize(ReadOnlySpan<byte> data, bool isNull, SerializationContext context)
-    {
-        if (isNull) return null;
-
-        var json = Encoding.UTF8.GetString(data.ToArray());
-        try
-        {
-            return JsonConvert.DeserializeObject(json);
+            var settings = new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented // 設定 Formatting 屬性為 Indented
+            };
+            var json = JsonConvert.SerializeObject(data, settings);
+            return Encoding.UTF8.GetBytes(json);
         }
-        catch
+
+        /// <summary>
+        /// 反序列化字节数据成实体数据
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public object Deserialize(ReadOnlySpan<byte> data, bool isNull, SerializationContext context)
         {
-            return json;
+            if (isNull) return null;
+
+            var json = Encoding.UTF8.GetString(data.ToArray());
+            try
+            {
+                return JsonConvert.DeserializeObject(json);
+            }
+            catch
+            {
+                return json;
+            }
         }
     }
+
 }

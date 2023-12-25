@@ -3,6 +3,9 @@ using Confluent.Kafka;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SPCorePackage.Kafka.Interface;
+using System.Diagnostics;
+using System.Text.Json;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace SPCorePackage.Kafka;
 
@@ -10,12 +13,20 @@ public class KafkaConsumerService<T, TH> : BackgroundService
     where T : IntegrationEvent
     where TH : IIntegrationEventHandler<T>
 {
+    private ILogger<KafkaConsumerService<T, TH>> _logger;
+    ILifetimeScope _autofac;
     private IConsumer<string, string> _consumer;
     private string _topicName;
-    public KafkaConsumerService(IConsumer<string, string> consumer,string topicName)
+    Type _eventHandlerType;
+    Type _eventType;
+    public KafkaConsumerService(ILogger<KafkaConsumerService<T, TH>> logger, IConsumer<string, string> consumer,string topicName, ILifetimeScope scope)
     {
+        _logger = logger;
         _consumer = consumer;
         _topicName = topicName;
+        _eventHandlerType = typeof(TH);
+        _eventType = typeof(T);
+        _autofac = scope;
     }
 
     public override Task StartAsync(CancellationToken cancellationToken)
@@ -55,5 +66,32 @@ public class KafkaConsumerService<T, TH> : BackgroundService
 
     private async Task ProcessEvent(string eventName, string message, long offset, string messageKey)
     {
+
+        using (var scope = _autofac.BeginLifetimeScope("SP"))
+        {
+            var handler = scope.ResolveOptional(_eventHandlerType);
+            if (handler == null)
+            {
+                _logger.LogError($"Autofac resolve {_eventHandlerType} error.");
+                return;
+            }
+
+            try
+            {
+                T integrationEvent = JsonSerializer.Deserialize(
+                    message,
+                    _eventType,
+                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }) as T;
+                integrationEvent.Offset = offset;
+
+                await (Task)_eventHandlerType.GetMethod("Handle").Invoke(handler, new object[] { integrationEvent });
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = $"ERROR ProcessEvent {_eventHandlerType.Name}, {ex.Message}, {ex}";
+                throw;
+            }
+        }
+            
     }
 }
