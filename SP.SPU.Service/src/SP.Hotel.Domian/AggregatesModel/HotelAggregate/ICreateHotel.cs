@@ -8,6 +8,7 @@ namespace SP.SPU.Domian.AggregatesModel.HotelAggregate;
 
 public interface ICreateHotel
 {
+    public int HotelId { get; set; }
     public string Name { get; set; }
     public string City { get; set; }
     public string Area { get; set; }

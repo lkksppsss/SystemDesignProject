@@ -1,8 +1,5 @@
-using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using Coravel;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MySqlConnector;
@@ -12,6 +9,7 @@ using SP.SPU.API.Application.IntegrationEvents.PublishEvents;
 using SP.SPU.API.Application.Queries;
 using SP.SPU.Domian.AggregatesModel.HotelAggregate;
 using SP.SPU.Infrastructure;
+using SP.SPU.Infrastructure.ElasticSearch;
 using SP.SPU.Infrastructure.Repositories;
 using SP.SPU.Infrastructure.SeedWork;
 using SPCorePackage.Extensions;
@@ -71,11 +69,13 @@ public class Program
 
         builder.Services.AddControllers();
         builder.Services.AddScoped<IHotelRepository, HotelRepository>();
+        builder.Services.AddScoped<IElasticsearchService, ElasticsearchService>();
 
         builder.Services.AddMemoryCache();
 
+        // kafka 
         var kafkaConnectString = configuration.GetSection("KafkaConnectString").Value;
-        builder.Services.AddKafkaBus(kafkaConnectString, TestPublishEvent.EventName);
+        builder.Services.AddKafkaBus(kafkaConnectString);
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
@@ -155,8 +155,7 @@ public class Program
 
         var eventBus = app.Services.GetRequiredService<IEventBus>();
 
-        eventBus.Subscribe<TestPublishEvent, TestPublishEventHandler> (TestPublishEvent.EventName);
-
+        eventBus.Subscribe<CreateHotelEvent, CreateHotelEventHandler>(CreateHotelEvent.EventName);
 
         app.Services.UseScheduler(scheduler =>
         {

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using SP.SPU.API.Application.Commands;
+using SP.SPU.API.Application.IntegrationEvents.PublishEvents;
 using SP.SPU.API.Application.Models;
 using SP.SPU.Domian.AggregatesModel.HotelAggregate;
 
@@ -9,9 +9,9 @@ public class HotelProfile : Profile
 {
     public HotelProfile()
     {
-        CreateMap<CreateHotelCommand, CreateHotelModel>();
-        CreateMap< CreateHotelPicture, ICreateHotelPicture>().As<CreateHotelPictureModel>();
-        CreateMap<CreateHotelPicture, CreateHotelPictureModel>()
+        CreateMap<CreateHotelEvent, CreateHotelModel>();
+        CreateMap<HotelPiceture, ICreateHotelPicture>().As<CreateHotelPictureModel>();
+        CreateMap<HotelPiceture, CreateHotelPictureModel>()
             .ForMember(x => x.Type, y => y.MapFrom(a => HotelPicType.From(a.Type)));
     }
 }

@@ -17,6 +17,7 @@ public class HotelEntity : Entity, IAggregateRoot
     }
     public HotelEntity(ICreateHotel data)
     {
+        Id = data.HotelId;
         Name = data.Name;
         City = data.City;
         Area = data.Area;

@@ -76,7 +76,7 @@ public class Program
         builder.Services.AddMemoryCache();
 
         var kafkaConnectString = configuration.GetSection("KafkaConnectString").Value;
-        builder.Services.AddKafkaBus(kafkaConnectString, TestPublishEvent.EventName);
+        builder.Services.AddKafkaBus(kafkaConnectString, CreateHotelEvent.EventName);
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
@@ -155,9 +155,6 @@ public class Program
         });
 
         var eventBus = app.Services.GetRequiredService<IEventBus>();
-
-        eventBus.Subscribe<TestPublishEvent, TestPublishEventHandler > (TestPublishEvent.EventName);
-
 
         app.Services.UseScheduler(scheduler =>
         {
