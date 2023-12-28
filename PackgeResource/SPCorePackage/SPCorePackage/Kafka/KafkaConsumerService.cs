@@ -3,9 +3,7 @@ using Confluent.Kafka;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SPCorePackage.Kafka.Interface;
-using System.Diagnostics;
 using System.Text.Json;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace SPCorePackage.Kafka;
 
@@ -59,6 +57,9 @@ public class KafkaConsumerService<T, TH> : BackgroundService
             }
             catch (Exception ex)
             {
+
+                _logger.LogCritical($"Kafka's subscribtion {_topicName} with {_eventHandlerType.Name} from {typeof(TH).Assembly.GetName().Name} was stopped at offset: {offset}.");
+                _logger.LogError($"Consuming {_topicName} at offset {offset} has error: {Environment.NewLine}{@ex}");
                 await StopAsync(stoppingToken);
             }
         }
@@ -88,7 +89,7 @@ public class KafkaConsumerService<T, TH> : BackgroundService
             }
             catch (Exception ex)
             {
-                string errorMessage = $"ERROR ProcessEvent {_eventHandlerType.Name}, {ex.Message}, {ex}";
+                _logger.LogError($"ERROR ProcessEvent {_eventHandlerType.Name}, {ex.Message}, {ex}");
                 throw;
             }
         }

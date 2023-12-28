@@ -1,3 +1,4 @@
+using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using Coravel;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using SP.SPU.API.Application.Queries;
 using SP.SPU.Domian.AggregatesModel.HotelAggregate;
 using SP.SPU.Infrastructure;
 using SP.SPU.Infrastructure.ElasticSearch;
+using SP.SPU.Infrastructure.Models;
 using SP.SPU.Infrastructure.Repositories;
 using SP.SPU.Infrastructure.SeedWork;
 using SPCorePackage.Extensions;
@@ -20,6 +22,7 @@ namespace SP.SPU.API;
 
 public class Program
 {
+    private static NLog.Logger _nlogger;
     private static async Task Main(string[] args)
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -33,10 +36,12 @@ public class Program
         }
         catch (Exception ex)
         {
+            _nlogger.Error(ex, "PXBox.InvoiceUnifier.Service error: {SetupException}", ex);
             throw;
         }
         finally
         {
+            NLog.LogManager.Shutdown();
         }
 
     }
@@ -53,8 +58,9 @@ public class Program
         builder.Services.AddAutoMapper(profileAssemblies);
 
         builder.Services.AddScheduler();
-
         builder.Services.AddHttpContextAccessor();
+
+        builder.Services.Configure<ElasticSetting>(configuration.GetSection("ElasticSetting"));
 
         var mySqlConnectionStr = configuration.GetSection("MySqlConnection:Main").Value;
         builder.Services.AddDbContext<DataContext>(options =>
@@ -135,9 +141,6 @@ public class Program
                 c.RoutePrefix = "7031/swagger";
             });
         }
-        /*
-        app.UseMiddleware<RequestIdMiddleware>();
-        app.UseMiddleware<APILogMiddleware>();*/
 
         app.UseCors(builder => builder
             .SetIsOriginAllowed(host => true)

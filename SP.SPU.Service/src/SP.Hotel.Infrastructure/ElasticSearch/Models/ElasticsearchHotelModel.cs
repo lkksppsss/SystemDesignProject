@@ -4,8 +4,7 @@ namespace SP.SPU.Infrastructure.ElasticSearch.Models;
 
 public class ElasticsearchHotelModel
 {
-    [Number(Name = "hotel_id", Index = false)]
-    public int HotelId { get; set; }
+    public int Id { get; set; }
 
     [Keyword(Name = "hotel_name", Index = true)]
     public string Name { get; set; }

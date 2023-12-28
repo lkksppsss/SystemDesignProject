@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MySqlConnector;
 using NLog.Web;
-using SP.Hotel.API.Application.IntegrationEvents.EventHandling;
 using SP.Hotel.API.Application.IntegrationEvents.PublishEvents;
 using SP.Hotel.API.Application.Queries;
 using SP.Hotel.Domian.AggregatesModel.HotelAggregate;
@@ -23,6 +22,7 @@ namespace SP.Hotel.API;
 
 public class Program
 {
+    private static NLog.Logger _nlogger;
     private static async Task Main(string[] args)
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -36,10 +36,12 @@ public class Program
         }
         catch (Exception ex)
         {
+            _nlogger.Error(ex, "PXBox.InvoiceUnifier.Service error: {SetupException}", ex);
             throw;
         }
         finally
         {
+            NLog.LogManager.Shutdown();
         }
 
     }
@@ -136,9 +138,6 @@ public class Program
                 c.RoutePrefix = "7031/swagger";
             });
         }
-        /*
-        app.UseMiddleware<RequestIdMiddleware>();
-        app.UseMiddleware<APILogMiddleware>();*/
 
         app.UseCors(builder => builder
             .SetIsOriginAllowed(host => true)

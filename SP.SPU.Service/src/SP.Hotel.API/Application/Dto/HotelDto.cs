@@ -1,6 +1,6 @@
-﻿namespace SP.SPU.API.ViewModels;
+﻿namespace SP.SPU.API.Application.Dto;
 
-public class HotelVo
+public class HotelDto
 {
     public int Id { get; set; }
     public string Name { get; set; }
@@ -9,10 +9,11 @@ public class HotelVo
     public string Address { get; set; }
     public string Description { get; set; }
 
-    public List<HotelPicetureVo> Pictures { get; set; }
+    public List<HotelPicetureDto> Pictures { get; set; } = new();
 }
-public class HotelPicetureVo
+public class HotelPicetureDto
 {
     public int Type { get; set; }
     public string Url { get; set; }
 }
+

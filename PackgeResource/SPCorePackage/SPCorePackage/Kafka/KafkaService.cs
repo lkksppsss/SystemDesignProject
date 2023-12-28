@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SPCorePackage.Kafka.Interface;
 using System.Text;
-using System.Text.Json;
 
 namespace SPCorePackage.Kafka;
 
@@ -18,11 +17,13 @@ public class KafkaService : IEventBus
     private ConsumerConfig _consumerConfig;
     private readonly CancellationTokenSource _cancelTokenSource;
     private readonly ILifetimeScope _autofac;
+    private readonly ILogger<KafkaService> _logger;
 
-    public KafkaService(string service, ILifetimeScope autofac, params string[] topics)
+    public KafkaService(string service, ILogger<KafkaService> logger, ILifetimeScope autofac, params string[] topics)
     {
         ProducerConfig producerConfig = new ProducerConfig();
         producerConfig.BootstrapServers = service;
+        _logger = logger;
         _autofac = autofac;
         ProducerBuilder = new ProducerBuilder<string, object>(producerConfig);
         ProducerBuilder.SetValueSerializer(new KafkaConverter());//设置序列化方式
@@ -66,6 +67,7 @@ public class KafkaService : IEventBus
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Publishing message to Kafka fail, ex={ex}");
             }
             finally
             {
@@ -144,7 +146,7 @@ public class KafkaService : IEventBus
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occured creating topic ex={ex}");
+                _logger.LogError($"CreateTopics to Kafka fail, ex={ex}");
             }
         }
         return allTopicNames;

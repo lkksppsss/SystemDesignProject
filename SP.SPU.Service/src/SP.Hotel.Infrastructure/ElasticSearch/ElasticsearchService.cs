@@ -1,23 +1,19 @@
 ﻿using Elasticsearch.Net;
-using MediatR;
+using Microsoft.Extensions.Options;
 using Nest;
-using Newtonsoft.Json;
 using SP.SPU.Infrastructure.ElasticSearch.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using SP.SPU.Infrastructure.Models;
 
 namespace SP.SPU.Infrastructure.ElasticSearch;
 
 public class ElasticsearchService : IElasticsearchService
 {
     private readonly ElasticClient _elasticClient;
-    public ElasticsearchService()
+    private readonly ElasticSetting _elasticSetting;
+    public ElasticsearchService(IOptions<ElasticSetting> elasticSetting)
     {
-        var node = new Uri("http://127.0.0.1:9200");
+        _elasticSetting = elasticSetting.Value;
+        var node = new Uri(_elasticSetting.ConnectString);
         var settings = new ConnectionSettings(node);
         _elasticClient = new ElasticClient(settings);
     }
@@ -26,7 +22,7 @@ public class ElasticsearchService : IElasticsearchService
         var synonymFilterName = "my_synonym";
         var nGramFilterName = "my_ngram";
         var lowercase = "lowercase";
-        var response = await  _elasticClient.Indices.CreateAsync("hotel", c => c
+        var response = await  _elasticClient.Indices.CreateAsync(_elasticSetting.Index, c => c
             .Settings(s => s
                 .Setting("index.max_ngram_diff", 8)
                 .Analysis(a => a
@@ -41,7 +37,7 @@ public class ElasticsearchService : IElasticsearchService
     }
     public async Task Insert(ElasticsearchHotelModel houseDTO)
     {
-        var response = await _elasticClient.IndexAsync(houseDTO, b => b.Index("hotel"));
+        var response = await _elasticClient.IndexAsync(houseDTO, b => b.Index(_elasticSetting.Index));
     }
     public async Task<List<ElasticsearchHotelModel>> SearchAsync(ElasticsearchSearchRequest request)
     {
@@ -81,7 +77,7 @@ public class ElasticsearchService : IElasticsearchService
             descriptionQuery.Boost = 5; // 欄位權重
             queryContainer |= descriptionQuery;
         }
-        var aaa = new SearchRequest<ElasticsearchHotelModel>("hotel")
+        var req = new SearchRequest<ElasticsearchHotelModel>(_elasticSetting.Index)
         {
             From = 0,
             Size = 10,
@@ -91,7 +87,7 @@ public class ElasticsearchService : IElasticsearchService
             }
         };
 
-        string jsonString = _elasticClient.RequestResponseSerializer.SerializeToString(aaa);
+        string jsonString = _elasticClient.RequestResponseSerializer.SerializeToString(req);
 
         var searchDescriptor = new SearchDescriptor<ElasticsearchHotelModel>()
             .Index("hotel")

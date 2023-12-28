@@ -9,8 +9,7 @@ public class ElasticProfile : Profile
 {
     public ElasticProfile()
     {
-        CreateMap<HotelEntity, ElasticsearchHotelModel>()
-            .ForMember(x => x.HotelId, y => y.MapFrom(a => a.Id)); 
+        CreateMap<HotelEntity, ElasticsearchHotelModel>(); 
         CreateMap<HotelPictureEntity, ElasticsearchHotelPiceture>()
             .ForMember(x => x.Type , y => y.MapFrom(a => a.Type.Id)); 
 

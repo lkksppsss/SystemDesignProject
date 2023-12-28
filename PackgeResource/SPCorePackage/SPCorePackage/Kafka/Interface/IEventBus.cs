@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SPCorePackage.Kafka.Interface;
+﻿namespace SPCorePackage.Kafka.Interface;
 
 public interface IEventBus
 {

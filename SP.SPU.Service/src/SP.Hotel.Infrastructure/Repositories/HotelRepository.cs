@@ -21,6 +21,6 @@ public class HotelRepository : IHotelRepository
 
     public async Task<HotelEntity> GetAsync(int id)
     {
-        return await _context.Hotels.FirstOrDefaultAsync(x => x.Id == id);
+        return await _context.Hotels.Include(x => x.Pictures ).FirstOrDefaultAsync(x => x.Id == id);
     }
 }

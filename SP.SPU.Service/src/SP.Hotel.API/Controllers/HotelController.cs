@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using SP.SPU.API.Application.Commands;
 using SP.SPU.API.Application.Queries.HotelQueries;
 using SP.SPU.API.ViewModels;
-using SPCorePackage.Kafka.Interface;
 using SPCorePackage.SeedWork;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -21,11 +20,11 @@ public class HotelController : ControllerBase
 
     [HttpGet("/app/1.0/spu/get_hotel_on_dapper")]
     [SwaggerOperation(Summary = "取得飯店資訊-dapper", Tags = new[] { "前台-飯店管理" })]
-    [ProducesResponseType(typeof(SPResponse<HotelVo>), 200)]
+    [ProducesResponseType(typeof(SPResponse<List<HotelVo>>), 200)]
     public async Task<IActionResult> GetHotelOnDappe([FromQuery]GetHotelOnDapperQuery query)
     {
         var result = await _mediator.Send(query);
-        return Ok(new SPResponse<HotelVo>(result));
+        return Ok(new SPResponse<List<HotelVo>>(result));
     }
 
     [HttpGet("/app/1.0/spu/get_hotel_on_elastic")]
