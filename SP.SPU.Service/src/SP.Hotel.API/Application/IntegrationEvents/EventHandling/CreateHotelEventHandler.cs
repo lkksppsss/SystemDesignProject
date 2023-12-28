@@ -22,14 +22,21 @@ public class CreateHotelEventHandler : IIntegrationEventHandler<CreateHotelEvent
 
     public async Task Handle(CreateHotelEvent @event)
     {
-        var hotelModel = _mapper.Map<CreateHotelModel>(@event);
-        var hotelEntity = new HotelEntity(hotelModel);
-        _hotelRepo.Add(hotelEntity);
-
-        if(await _hotelRepo.UnitOfWork.SaveEntitiesAsync() > 0)
+        try
         {
-            var elasticModel = _mapper.Map<ElasticsearchHotelModel>(hotelEntity);
-            _elasticService.Insert(elasticModel);
+            var hotelModel = _mapper.Map<CreateHotelModel>(@event);
+            var hotelEntity = new HotelEntity(hotelModel);
+            _hotelRepo.Add(hotelEntity);
+
+            if (await _hotelRepo.UnitOfWork.SaveEntitiesAsync() > 0)
+            {
+                var elasticModel = _mapper.Map<ElasticsearchHotelModel>(hotelEntity);
+                _elasticService.Insert(elasticModel);
+            }
+        }
+        catch(Exception ex)
+        {
+
         }
     }
 }

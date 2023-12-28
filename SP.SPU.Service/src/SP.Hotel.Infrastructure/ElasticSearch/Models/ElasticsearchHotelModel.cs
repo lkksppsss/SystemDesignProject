@@ -1,9 +1,4 @@
 ﻿using Nest;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SP.SPU.Infrastructure.ElasticSearch.Models;
 
@@ -24,7 +19,7 @@ public class ElasticsearchHotelModel
     [Keyword(Name = "address", Index = true)]
     public string Address { get; set; }
 
-    [Text(Name = "description", Index = false)]
+    [Text(Name = "description", Index = true)]
     public string Description { get; set; }
 
     [Object]

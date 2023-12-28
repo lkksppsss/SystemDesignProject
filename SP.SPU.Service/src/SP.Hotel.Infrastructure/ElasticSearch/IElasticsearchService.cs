@@ -9,6 +9,7 @@ namespace SP.SPU.Infrastructure.ElasticSearch;
 
 public interface IElasticsearchService
 {
-    void Insert(ElasticsearchHotelModel houseDTO);
-    List<ElasticsearchHotelModel> Search(ElasticsearchSearchRequest request);
+    Task Insert(ElasticsearchHotelModel houseDTO);
+    Task<List<ElasticsearchHotelModel>> SearchAsync(ElasticsearchSearchRequest request);
+    Task CreateIndex();
 }

@@ -1,10 +1,6 @@
-﻿using SP.SPU.Domian.AggregatesModel.HotelAggregate;
+﻿using Microsoft.EntityFrameworkCore;
+using SP.SPU.Domian.AggregatesModel.HotelAggregate;
 using SP.SPU.Domian.SeedWork;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SP.SPU.Infrastructure.Repositories;
 
@@ -21,5 +17,10 @@ public class HotelRepository : IHotelRepository
     public void Add(HotelEntity installmentEntity)
     {
         _context.Hotels.Add(installmentEntity);
+    }
+
+    public async Task<HotelEntity> GetAsync(int id)
+    {
+        return await _context.Hotels.FirstOrDefaultAsync(x => x.Id == id);
     }
 }

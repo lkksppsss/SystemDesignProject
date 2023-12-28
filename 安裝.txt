@@ -1,0 +1,26 @@
+ ZooKeeper:
+docker pull wurstmeister/zookeeper
+
+ Kafka:
+docker pull wurstmeister/kafka:2.8.0
+
+
+ elastic search
+安裝/啟動  Elasticsearch 容器
+docker run -d --name elasticsearch -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+
+
+安裝/啟動  Kibana 容器
+docker run -d --name kibana -p 5601:5601 --link elasticsearch:elasticsearch docker.elastic.co/kibana/kibana:7.10.2
+
+手動安裝分詞器
+1、 https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v7.10.2/elasticsearch-analysis-ik-7.10.2.zip
+2、# 将插件压缩包拷贝到容器中（假设插件在当前目录下）
+docker cp elasticsearch-analysis-ik-7.10.2.zip elasticsearch:/tmp/
+3、# 进入容器
+docker exec -it elasticsearch bash
+4、# 在容器中安装插件
+./bin/elasticsearch-plugin install file:///tmp/elasticsearch-analysis-ik-7.10.2.zip
+
+5、重啟 Elasticsearch 容器
+
