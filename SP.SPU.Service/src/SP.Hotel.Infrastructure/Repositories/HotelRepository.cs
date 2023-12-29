@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SP.SPU.Domian.AggregatesModel.HotelAggregate;
-using SP.SPU.Domian.SeedWork;
+using SP.SPU.Domain.AggregatesModel.HotelAggregate;
+using SP.SPU.Domain.SeedWork;
 
 namespace SP.SPU.Infrastructure.Repositories;
 

@@ -10,7 +10,7 @@ using MySqlConnector;
 using NLog.Web;
 using SP.Hotel.API.Application.IntegrationEvents.PublishEvents;
 using SP.Hotel.API.Application.Queries;
-using SP.Hotel.Domian.AggregatesModel.HotelAggregate;
+using SP.Hotel.Domain.AggregatesModel.HotelAggregate;
 using SP.Hotel.Infrastructure;
 using SP.Hotel.Infrastructure.Repositories;
 using SP.Hotel.Infrastructure.SeedWork;

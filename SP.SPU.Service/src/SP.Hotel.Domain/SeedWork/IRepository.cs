@@ -1,4 +1,4 @@
-﻿namespace SP.SPU.Domian.SeedWork;
+﻿namespace SP.SPU.Domain.SeedWork;
 
 public interface IRepository<T> where T : IAggregateRoot
 {

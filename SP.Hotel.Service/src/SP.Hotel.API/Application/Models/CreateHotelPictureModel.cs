@@ -1,4 +1,4 @@
-﻿using SP.Hotel.Domian.AggregatesModel.HotelAggregate;
+﻿using SP.Hotel.Domain.AggregatesModel.HotelAggregate;
 
 namespace SP.Hotel.API.Application.Models;
 

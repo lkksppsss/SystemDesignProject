@@ -1,5 +1,5 @@
-﻿using SP.Hotel.Domian.AggregatesModel.HotelAggregate;
-using SP.Hotel.Domian.SeedWork;
+﻿using SP.Hotel.Domain.AggregatesModel.HotelAggregate;
+using SP.Hotel.Domain.SeedWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,6 +1,6 @@
-﻿using SP.Hotel.Domian.SeedWork;
+﻿using SP.Hotel.Domain.SeedWork;
 
-namespace SP.Hotel.Domian.AggregatesModel.HotelAggregate;
+namespace SP.Hotel.Domain.AggregatesModel.HotelAggregate;
 
 public class HotelPicType : Enumeration
 {

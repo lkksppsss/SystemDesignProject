@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using SP.SPU.Domian.AggregatesModel.HotelAggregate;
+using SP.SPU.Domain.AggregatesModel.HotelAggregate;
 using SP.SPU.Infrastructure.ElasticSearch;
 using SP.SPU.Infrastructure.ElasticSearch.Models;
 

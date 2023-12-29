@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SP.SPU.Domian.AggregatesModel.HotelAggregate;
+namespace SP.Hotel.Domain.AggregatesModel.HotelAggregate;
 
 public interface ICreateHotelPicture
 {

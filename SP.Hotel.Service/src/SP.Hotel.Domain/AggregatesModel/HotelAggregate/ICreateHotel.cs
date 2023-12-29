@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SP.SPU.Domian.AggregatesModel.HotelAggregate;
+namespace SP.Hotel.Domain.AggregatesModel.HotelAggregate;
 
 public interface ICreateHotel
 {
-    public int HotelId { get; set; }
     public string Name { get; set; }
     public string City { get; set; }
     public string Area { get; set; }

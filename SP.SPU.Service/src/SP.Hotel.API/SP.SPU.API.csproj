@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SP.Hotel.Domian\SP.SPU.Domian.csproj" />
+    <ProjectReference Include="..\SP.Hotel.Domain\SP.SPU.Domain.csproj" />
     <ProjectReference Include="..\SP.Hotel.Infrastructure\SP.SPU.Infrastructure.csproj" />
   </ItemGroup>
 

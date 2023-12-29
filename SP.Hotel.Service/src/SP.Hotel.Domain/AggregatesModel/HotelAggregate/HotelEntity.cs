@@ -1,6 +1,6 @@
-﻿using SP.SPU.Domian.SeedWork;
+﻿using SP.Hotel.Domain.SeedWork;
 
-namespace SP.SPU.Domian.AggregatesModel.HotelAggregate;
+namespace SP.Hotel.Domain.AggregatesModel.HotelAggregate;
 
 public class HotelEntity : Entity, IAggregateRoot
 {
@@ -17,7 +17,6 @@ public class HotelEntity : Entity, IAggregateRoot
     }
     public HotelEntity(ICreateHotel data)
     {
-        Id = data.HotelId;
         Name = data.Name;
         City = data.City;
         Area = data.Area;

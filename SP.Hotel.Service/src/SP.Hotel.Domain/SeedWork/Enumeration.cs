@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace SP.SPU.Domian.SeedWork;
+namespace SP.Hotel.Domain.SeedWork;
 
 public abstract class Enumeration : IComparable
 {

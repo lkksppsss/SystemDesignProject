@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using SP.SPU.API.ViewModels;
-using SP.SPU.Domian.AggregatesModel.HotelAggregate;
+using SP.SPU.Domain.AggregatesModel.HotelAggregate;
 using SP.SPU.Infrastructure.ElasticSearch.Models;
 
 namespace SP.SPU.API.Application.Profiles;

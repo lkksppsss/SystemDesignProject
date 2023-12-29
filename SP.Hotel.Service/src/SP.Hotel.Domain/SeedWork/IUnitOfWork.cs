@@ -1,4 +1,4 @@
-﻿namespace SP.Hotel.Domian.SeedWork;
+﻿namespace SP.Hotel.Domain.SeedWork;
 
 public interface IUnitOfWork : IDisposable
 {

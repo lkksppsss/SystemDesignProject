@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
-using SP.Hotel.Domian.AggregatesModel.HotelAggregate;
-using SP.Hotel.Domian.SeedWork;
+using SP.Hotel.Domain.AggregatesModel.HotelAggregate;
+using SP.Hotel.Domain.SeedWork;
 using SP.Hotel.Infrastructure.EntityConfig;
 using System.Data;
 

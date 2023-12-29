@@ -3,7 +3,7 @@ using SP.SPU.API.Application.Dto;
 using SP.SPU.API.Application.IntegrationEvents.PublishEvents;
 using SP.SPU.API.Application.Models;
 using SP.SPU.API.ViewModels;
-using SP.SPU.Domian.AggregatesModel.HotelAggregate;
+using SP.SPU.Domain.AggregatesModel.HotelAggregate;
 
 namespace SP.SPU.API.Application.Profiles;
 
