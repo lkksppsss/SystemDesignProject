@@ -1,3 +1,5 @@
-
-docker build -t sp.spu.service:tag -f SP.SPU.Service/Dockerfile .
-docker build -t sp.hotel.service:tag -f SP.Hotel.Service/Dockerfile .
+cd  SP.SPU.Service\
+spuimage.bat
+cd ..
+cd SP.Hotel.Service\
+SP.Hotel.Service\hotelimage.bat

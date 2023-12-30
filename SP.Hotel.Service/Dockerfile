@@ -26,5 +26,3 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "SP.Hotel.API.dll"]
-
-# docker build --no-cache -t sp.hotel.service:tag . 
