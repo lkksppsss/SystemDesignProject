@@ -1,9 +1,10 @@
-﻿using SP.Hotel.Domain.AggregatesModel.HotelAggregate;
+﻿using SP.SPU.Domain.AggregatesModel.HotelAggregate;
 
-namespace SP.Hotel.API.Application.Models;
+namespace SP.SPU.API.Application.Models;
 
 public class CreateHotelModel : ICreateHotel
 {
+    public int HotelId { get; set; }
     public string Name { get; set; }
     public string City { get; set; }
     public string Area { get; set; }

@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
+﻿using Microsoft.Extensions.Configuration;
+using System.Text.Json.Serialization;
 
 namespace SPCorePackage.SeedWork;
-
 public class SPResponse<T>
 {
     [JsonPropertyName("code")]

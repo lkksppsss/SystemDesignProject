@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
@@ -24,12 +24,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SP.Hotel.Domain\SP.Hotel.Domain.csproj" />
-    <ProjectReference Include="..\SP.Hotel.Infrastructure\SP.Hotel.Infrastructure.csproj" />
+    <Folder Include="Application\IntegrationEvents\PublishEvents\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\IntegrationEvents\SubscribeEvents\" />
+    <ProjectReference Include="..\SP.SPU.Domain\SP.SPU.Domain.csproj" />
+    <ProjectReference Include="..\SP.SPU.Infrastructure\SP.SPU.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

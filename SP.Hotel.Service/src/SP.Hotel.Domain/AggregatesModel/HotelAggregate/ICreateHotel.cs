@@ -1,8 +1,12 @@
-﻿using SP.Hotel.Domain.AggregatesModel.HotelAggregate;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace SP.Hotel.API.Application.Models;
+namespace SP.Hotel.Domain.AggregatesModel.HotelAggregate;
 
-public class CreateHotelModel : ICreateHotel
+public interface ICreateHotel
 {
     public string Name { get; set; }
     public string City { get; set; }

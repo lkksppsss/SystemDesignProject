@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using SP.Hotel.Domain.AggregatesModel.HotelAggregate;
+using SP.SPU.Domain.AggregatesModel.HotelAggregate;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace SP.Hotel.Infrastructure.EntityConfig;
+namespace SP.SPU.Infrastructure.EntityConfig;
 
 public class HotelPictureEntityConfig : IEntityTypeConfiguration<HotelPictureEntity>
 {
