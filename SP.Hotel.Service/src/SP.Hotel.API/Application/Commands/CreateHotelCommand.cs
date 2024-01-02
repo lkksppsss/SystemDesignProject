@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using SP.Hotel.Domain.AggregatesModel.HotelAggregate;
+using SP.Hotel.Domian.AggregatesModel.HotelAggregate;
 
 namespace SP.Hotel.API.Application.Commands;
 

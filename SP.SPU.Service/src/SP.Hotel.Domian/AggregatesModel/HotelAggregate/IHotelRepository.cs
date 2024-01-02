@@ -1,6 +1,6 @@
-﻿using SP.SPU.Domain.SeedWork;
+﻿using SP.SPU.Domian.SeedWork;
 
-namespace SP.SPU.Domain.AggregatesModel.HotelAggregate;
+namespace SP.SPU.Domian.AggregatesModel.HotelAggregate;
 
 public interface IHotelRepository : IRepository<HotelEntity>
 {

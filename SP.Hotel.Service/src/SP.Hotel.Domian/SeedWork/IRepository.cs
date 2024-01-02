@@ -1,4 +1,4 @@
-﻿namespace SP.Hotel.Domain.SeedWork;
+﻿namespace SP.Hotel.Domian.SeedWork;
 
 public interface IRepository<T> where T : IAggregateRoot
 {

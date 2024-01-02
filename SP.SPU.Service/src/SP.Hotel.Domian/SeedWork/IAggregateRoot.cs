@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SP.Hotel.Domain.SeedWork;
+namespace SP.SPU.Domian.SeedWork;
 
 public interface IAggregateRoot
 {

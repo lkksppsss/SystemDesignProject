@@ -8,7 +8,7 @@ using NLog.Web;
 using SP.SPU.API.Application.IntegrationEvents.EventHandling;
 using SP.SPU.API.Application.IntegrationEvents.PublishEvents;
 using SP.SPU.API.Application.Queries;
-using SP.SPU.Domain.AggregatesModel.HotelAggregate;
+using SP.SPU.Domian.AggregatesModel.HotelAggregate;
 using SP.SPU.Infrastructure;
 using SP.SPU.Infrastructure.ElasticSearch;
 using SP.SPU.Infrastructure.Models;

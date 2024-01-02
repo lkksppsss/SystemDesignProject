@@ -1,6 +1,6 @@
-﻿using SP.Hotel.Domain.SeedWork;
+﻿using SP.SPU.Domian.SeedWork;
 
-namespace SP.Hotel.Domain.AggregatesModel.HotelAggregate;
+namespace SP.SPU.Domian.AggregatesModel.HotelAggregate;
 
 public class HotelPictureEntity : Entity
 {

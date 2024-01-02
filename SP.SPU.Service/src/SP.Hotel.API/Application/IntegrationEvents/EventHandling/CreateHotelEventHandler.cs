@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using SP.SPU.API.Application.IntegrationEvents.PublishEvents;
 using SP.SPU.API.Application.Models;
-using SP.SPU.Domain.AggregatesModel.HotelAggregate;
+using SP.SPU.Domian.AggregatesModel.HotelAggregate;
 using SP.SPU.Infrastructure.ElasticSearch;
 using SP.SPU.Infrastructure.ElasticSearch.Models;
 using SPCorePackage.Kafka.Interface;

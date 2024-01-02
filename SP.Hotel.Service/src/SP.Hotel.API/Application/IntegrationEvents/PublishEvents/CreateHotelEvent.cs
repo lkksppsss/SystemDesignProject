@@ -1,4 +1,4 @@
-﻿using SP.Hotel.Domain.AggregatesModel.HotelAggregate;
+﻿using SP.Hotel.Domian.AggregatesModel.HotelAggregate;
 using SPCorePackage.Kafka;
 
 namespace SP.Hotel.API.Application.IntegrationEvents.PublishEvents;

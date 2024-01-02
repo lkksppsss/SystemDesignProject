@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Newtonsoft.Json;
 
-namespace SP.SPU.Domain.SeedWork;
+namespace SP.Hotel.Domian.SeedWork;
 
 public abstract class Entity
 {

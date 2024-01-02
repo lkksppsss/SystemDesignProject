@@ -2,7 +2,7 @@
 using MediatR;
 using SP.Hotel.API.Application.IntegrationEvents.PublishEvents;
 using SP.Hotel.API.Application.Models;
-using SP.Hotel.Domain.AggregatesModel.HotelAggregate;
+using SP.Hotel.Domian.AggregatesModel.HotelAggregate;
 using SPCorePackage.Kafka.Interface;
 
 namespace SP.Hotel.API.Application.Commands;

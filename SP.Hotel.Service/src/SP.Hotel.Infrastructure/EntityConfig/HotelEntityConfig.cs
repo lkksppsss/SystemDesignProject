@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using SP.Hotel.Domain.AggregatesModel.HotelAggregate;
+using SP.Hotel.Domian.AggregatesModel.HotelAggregate;
 
 namespace SP.Hotel.Infrastructure.EntityConfig;
 

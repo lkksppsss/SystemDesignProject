@@ -1,4 +1,4 @@
-﻿namespace SP.SPU.Domain.SeedWork;
+﻿namespace SP.SPU.Domian.SeedWork;
 
 public interface IUnitOfWork : IDisposable
 {
