@@ -1,6 +1,6 @@
-﻿using SP.Hotel.Domain.AggregatesModel.HotelAggregate;
+﻿using SP.SPU.Domain.AggregatesModel.HotelAggregate;
 
-namespace SP.Hotel.API.Application.Models;
+namespace SP.SPU.API.Application.Models;
 
 public class CreateHotelPictureModel : ICreateHotelPicture
 {

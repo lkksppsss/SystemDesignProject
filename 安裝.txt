@@ -1,4 +1,6 @@
- ZooKeeper:
+執行建立微服務Image檔: 建立Image檔.bat
+
+ZooKeeper:
 docker pull wurstmeister/zookeeper
 
  Kafka:
@@ -23,4 +25,8 @@ docker exec -it elasticsearch bash
 ./bin/elasticsearch-plugin install file:///tmp/elasticsearch-analysis-ik-7.10.2.zip
 
 5、重啟 Elasticsearch 容器
+
+
+
+.
 

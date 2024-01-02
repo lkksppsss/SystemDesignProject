@@ -1,0 +1,1 @@
+docker build -t sp.spu.service:tag .

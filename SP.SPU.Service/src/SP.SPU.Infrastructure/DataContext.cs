@@ -2,17 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
-using SP.Hotel.Domain.AggregatesModel.HotelAggregate;
-using SP.Hotel.Domain.SeedWork;
-using SP.Hotel.Infrastructure.EntityConfig;
+using SP.SPU.Domain.AggregatesModel.HotelAggregate;
+using SP.SPU.Domain.SeedWork;
+using SP.SPU.Infrastructure.EntityConfig;
 using System.Data;
 
-namespace SP.Hotel.Infrastructure;
+namespace SP.SPU.Infrastructure;
 
 
 public class DataContext : DbContext, IUnitOfWork
 {
-    public const string DEFAULT_SCHEMA = "hotel";
+    public const string DEFAULT_SCHEMA = "spu";
 
     private readonly ILogger<DataContext> _logger;
     private readonly IMediator _mediator;
